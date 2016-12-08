@@ -1,0 +1,805 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Interactive Lesson</title>
+  <meta name="description" content="Interactive Transcript">
+  <meta name="author" content="mikejcsmith">
+
+	<!-- Include meta tag to ensure proper rendering and touch zooming -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Include jQuery Mobile stylesheets -->
+	<link rel="stylesheet" href="lib/jquery-mobile/jquery.mobile.min.css">
+
+	<style><!-- UI styles -->
+	.ui-content {
+		
+		padding: 0.1em;
+		
+	}
+	
+	</style><!-- UI styles -->
+
+	<!-- Include the jQuery library -->
+	<script src="lib/jquery/jquery.min.js"></script>
+
+	<!-- Include the jQuery Mobile library -->
+	<script src="lib/jquery-mobile/jquery.mobile.min.js"></script>
+
+	<!-- Include the Popcornjs library -->
+	<script src="lib/popcorn/popcorn.js"></script>
+	<script src="lib/popcorn/popcorn-functions-early.js"></script>
+	<script src="lib/popcorn/popcorn-process-late.js"></script>
+
+	<!-- Include the jQueryUI style sheets -->
+	<link rel="stylesheet" href="lib/jquery-ui/jquery-ui.min.css">
+
+	<!-- Include the jQueryUI library -->
+	<script src="lib/jquery-ui/jquery-ui.min.js"></script>
+
+	<!-- Include the jQueryUI Touch Punch library -->
+	<script src="lib/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+
+	<script src="lib/slimscroll/jquery.slimscroll.min.js"></script>
+
+
+
+	<!-- Include the script for video popups - functions first -->
+	<script> <!-- make video popup behave per https://api.jquerymobile.com/popup/ -->
+		function scale( width, height, padding, border ) {
+			var scrWidth = $( window ).width() - 30,
+				scrHeight = $( window ).height() - 30,
+				ifrPadding = 2 * padding,
+				ifrBorder = 2 * border,
+				ifrWidth = width + ifrPadding + ifrBorder,
+				ifrHeight = height + ifrPadding + ifrBorder,
+				h, w;
+ 
+			if ( ifrWidth < scrWidth && ifrHeight < scrHeight ) {
+				w = ifrWidth;
+				h = ifrHeight;
+			} else if ( ( ifrWidth / scrWidth ) > ( ifrHeight / scrHeight ) ) {
+				w = scrWidth;
+				h = ( scrWidth / ifrWidth ) * ifrHeight;
+			} else {
+				h = scrHeight;
+				w = ( scrHeight / ifrHeight ) * ifrWidth;
+			}
+ 
+			return {
+				'width': w - ( ifrPadding + ifrBorder ),
+				'height': h - ( ifrPadding + ifrBorder )
+			};
+		};		
+	</script> <!-- make video popup behave per https://api.jquerymobile.com/popup/ -->
+	
+	<script> <!--- randomise DOM elements http://james.padolsey.com/javascript/shuffling-the-dom/ --->
+
+	(function($){
+ 
+    $.fn.shuffle = function() {
+ 
+        var allElems = this.get(),
+            getRandom = function(max) {
+                return Math.floor(Math.random() * max);
+            },
+            shuffled = $.map(allElems, function(){
+                var random = getRandom(allElems.length),
+                    randEl = $(allElems[random]).clone(true)[0];
+                allElems.splice(random, 1);
+                return randEl;
+           });
+ 
+        this.each(function(i){
+            $(this).replaceWith($(shuffled[i]));
+        });
+ 
+        return $(shuffled);
+ 
+    };
+ 
+})(jQuery);
+	
+	</script> <!--- randomise DOM elements http://james.padolsey.com/javascript/shuffling-the-dom/ --->
+	
+	<!-- Custom JQuery Mobile Theme -->
+	<link rel="stylesheet" href="lib/css/themes/mjcs-blue-green.css" />
+    <link rel="stylesheet" href="lib/css/themes/jquery.mobile.icons.min.css" />
+
+	<style>
+	 
+		.ui-content {
+		padding: 0 0;
+		}
+	
+		.ui-collapsible-inset, .ui-collapsible-set {
+		margin: 0 0; 
+		}
+
+		.ui-collapsible-content {
+		padding: .1em 1em;
+		}
+	
+		.ui-mini {
+		margin: 0.446em;
+		}
+	
+		ui-btn-inline {
+		margin-right: 0.625em;
+		}
+	
+		.ui-btn {
+		padding: 0.2em 3em;
+		}
+	
+	button.ui-btn.ui-btn-inline.ui-corner-all.ui-mini {
+
+	padding: 0.2em 0.4em;
+	margin: 0em;
+
+	}
+	
+	
+	
+	</style><!-- ui styles -->
+
+	<!-- Include the jQuery Scrollto library -->
+	<script src="lib/jquery.scrollTo/jquery.scrollTo.js"></script>
+
+	<style><!-- styles for popcorn.js elements -->
+	/*
+	 * <!-- styles for popcorn.js elements -->
+	 */   
+	#transcript p {}
+
+	.speakmedia {color: blue; background-color: white; font-size: 1em;}
+	.play-button-withicon {background-color: white; border-radius: 6px; padding: .1em .5em .1em .5em; cursor: pointer; border: 1px solid grey;
+
+		text-shadow: 0 1px 1px rgba(0,0,0,.3);
+		-webkit-border-radius: .5em; 
+		-moz-border-radius: .5em;
+		border-radius: .5em;
+		-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+		-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+		box-shadow: 0 1px 2px rgba(0,0,0,.2);
+
+	}
+
+	.play-button {background-color: white; border-radius: 6px; padding: .1em .5em .1em .5em; cursor: pointer; border: 1px solid grey;
+
+		text-shadow: 0 1px 1px rgba(0,0,0,.3);
+		-webkit-border-radius: .5em; 
+		-moz-border-radius: .5em;
+		border-radius: .5em;
+		-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+		-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+		box-shadow: 0 1px 2px rgba(0,0,0,.2);
+
+	}
+
+	</style><!-- styles for popcorn.js elements -->
+
+	<!--
+    <script type="text/javascript" src="lib/mjcs-cloze/jcloze-v06-mjcs.js"></script>       
+    <link rel="stylesheet" type="text/css" href="lib/mjcs-cloze/jcloze-v03-mjcs-styles.css" /> 
+	-->
+
+	<style>
+	.hidden {display: none;}
+	</style> <!-- hidden style -->
+
+	
+	
+</head>
+
+<body>
+
+
+<!-- Page Listen -->
+<div data-role="page" id="pageListen">
+
+	<div data-role="panel" id="panelPageListen">
+		<!-- panel content goes here -->
+		<div data-role="navbar" data-iconpos="top">
+			<ul>
+				<li><a href="#pageListen" data-icon="audio" class="ui-btn-active">Listen</a></li>
+			</ul>
+		</div><!-- /navbar -->	
+		<p>Listen to the audio/video.</p>
+		<p>During the playback is when you discover new language and lexis (vocabulary). </p>
+		<p>You might read the transcript or you could just listen.  Questions will begin with the big picture (gist), and then get more specific.  You may have matching or sorting tasks.  </p>
+		<p>This is not a test.  It is designed to help you discover something new.</p>
+		<div><iframe src="https://player.vimeo.com/video/188217568" width="250						" height="140" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<p><a href="https://vimeo.com/188217568">Mini E-learning Demo 01</a> from <a href="https://vimeo.com/user39099888">Mike Smith</a> on <a href="https://vimeo.com">Vimeo</a>.</p></div>
+		<p>The sections below contain the audio/video.  The video will continue playing if you close that section. </p>
+		
+	</div><!-- /panel -->
+  
+	<div data-role="header" data-position="fixed">
+		<div><a href="#panelPageListen" class="ui-btn ui-icon-info ui-btn-icon-left ui-btn-inline">?</a>
+
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="cueVideoAndPlay(00)" type="button">Start</button>	
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="jogTime(-3)" type="button">-3</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="jogTime(-1)" type="button">-1</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="jogTime(-.1)" type="button">-.1</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="jogTime(-.01)" type="button">-.01</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="jogTime(.01)" type="button">+.01</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="jogTime(.1)" type="button">+.1</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="jogTime(1)" type="button">+1</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="jogTime(3)" type="button">+3</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideo()" type="button">Play</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="pauseVideo()" type="button">Pause</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideoRate(0.5)" type="button">x.5</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideoRate(1)" type="button">x1</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideoRate(1.5)" type="button">x1.5</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideoRate(-0.5)" type="button">-x.5</button>
+		<span id="trackTime">0 / 0</span>
+	</div>
+		
+		
+
+	</div><!-- /header -->
+
+	<div role="main" class="ui-content">
+		
+		<div id="sortable" data-role="notcollapsibleset"><!--collapsible set -->
+		
+			<div data-role="collapsible"  data-collapsed="false"><!--collapsible Video -->
+				<h3>Video and Transcript</h3>
+
+				<div data-role="collapsible" data-collapsed="false"  style="width:100%;  max-width: 480px; float: left; padding: 0px 0px;">
+					<h3>Video</h3>		
+
+					<div id="divVideo" style="max-width: 480px;  padding: 0px 0px; "  > 
+						<div id="divVideoInner">
+							<video id="myVideo" width="100%"   controls="controls" ontimeupdate="document.getElementById('trackTime').innerHTML = Math.floor(this.currentTime *100)/100 + ' / ' + Math.floor(this.duration);"> 
+								<!--
+								<source src="20131105_remembranceday_hi.mp4" type="video/mp4" /> 
+								-->					
+							</video>
+						</div>
+						<div id="divAtributions">
+							<a href="http://www.abc.net.au/btn/story/s3880227.htm" target="_blank">http://www.abc.net.au/btn/story/s2730859.htm</a> 
+						</div>
+						<div data-role="collapsible" data-collapsed="false"  style=" max-width: 480px;  padding: 0px 0px;">
+							<h3>Caption</h3>		
+							<div id="caption" style=" min-height: 60px; " ></div>
+						</div>
+					
+					</div>
+				</div>
+
+				<div data-role="collapsible" data-collapsed="false" style=" width:100%; max-width: 480px; float: left; padding: 0px 0px;">	
+					<h3>Interactive Transcript</h3>		
+					
+					<div id="transcript" >
+
+						<p id="transcript-01">Error </p>
+
+					
+					</div>
+				</div>
+				<div style="clear: left;"></div>
+			</div><!--collapsible Video -->
+
+			<div class="hidden" data-role="collapsible" style="display:normal;"><!--collapsible Sortable Transcript -->
+				<h3>Sortable Transcript</h3>
+				<p>Play this <button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playPopVideo(19.77,42.80,1,1)" type="button">Section 19.77 - 42.80</button> and put the lines into the correct order.</p> 
+
+				<div data-role="collapsible"><!--collapsible Need Help? -->
+					<h3>Need help?</h3>		
+					<p>Here are the audio sections in order:</p>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideo()" type="button">Play</button>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="pauseVideo()" type="button">Pause</button>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideoRate(1)" type="button">x1</button>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideoRate(0.5)" type="button">x0.5</button>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playPopVideo(19.77,42.80,1,1)" type="button">Section</button>	
+					</br>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playPopVideo((9), 15.2,1,1)" type="button">1</button>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playPopVideo((15.84), 21.6,1,1)" type="button">2</button>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playPopVideo((21.91), 28.65,1,1)" type="button">3</button>
+					<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playPopVideo((29.13), 35.02,1,1)" type="button">4</button>
+				
+				</div><!--collapsible Key and Explanations -->
+
+				<ul id="transcriptSortable">
+				
+						<li id="indexTranscriptSort-1"> <button class="ui-btn ui-btn-inline ui-corner-all ui-mini" onclick="playPopVideo((19.77), 22.9,1,1)">?</button> GIRL 1: When I'm older, I think I'm gonna be known as the cool grandma!</li>
+						<li id="indexTranscriptSort-2"> <button class="ui-btn ui-btn-inline ui-corner-all ui-mini" onclick="playPopVideo((22.92), 30.47,1,1)">?</button> BOY 1: Probably like wrinkly and have grandkids and slow and not very active!</li>
+						<li id="indexTranscriptSort-3"> <button class="ui-btn ui-btn-inline ui-corner-all ui-mini" onclick="playPopVideo((30.48), 38.94,1,1)">?</button> BOY 2: I'm probably going to be like frail and scrunched down and sitting in a wheelchair, wheeling around and stuff.</li>
+						<li id="indexTranscriptSort-4"> <button class="ui-btn ui-btn-inline ui-corner-all ui-mini" onclick="playPopVideo((39.04), 42.8,1,1)">?</button> GIRL 2: I'm gonna dye my hair red and I wanna ride a hoverboard to work!</li>
+
+
+				</ul>	
+
+				<div data-role="collapsible"><!--collapsible Need Help? -->
+					<h3>Answer</h3>		
+					<p>Here are the audio sections in order:</p>
+					<ul >
+				
+						<li id="indexTranscriptSort-1"> <button class="ui-btn ui-btn-inline ui-corner-all ui-mini" onclick="playPopVideo((19.77), 22.9)">19.77-22.90</button> GIRL 1: When I'm older, I think I'm gonna be known as the cool grandma!</li>
+						<li id="indexTranscriptSort-2"> <button class="ui-btn ui-btn-inline ui-corner-all ui-mini" onclick="playPopVideo((22.92), 30.47)">22.92-30.47</button> BOY 1: Probably like wrinkly and have grandkids and slow and not very active!</li>
+						<li id="indexTranscriptSort-3"> <button class="ui-btn ui-btn-inline ui-corner-all ui-mini" onclick="playPopVideo((30.48), 39.03)">30.48-39.03</button> BOY 2: I'm probably going to be like frail and scrunched down and sitting in a wheelchair, wheeling around and stuff.</li>
+						<li id="indexTranscriptSort-4"> <button class="ui-btn ui-btn-inline ui-corner-all ui-mini" onclick="playPopVideo((39.04), 42.8)">39.04-42.80</button> GIRL 2: I'm gonna dye my hair red and I wanna ride a hoverboard to work!</li>
+
+					</ul>	
+
+				
+				</div><!--collapsible Key and Explanations -->
+
+
+			</div><!--collapsible Sortable Transcript -->
+
+			<div id="compareTexts" class="hidden" data-role="collapsible"><!-- Compare Texts -->	
+				<h3 id="compareTextsTitle">Compare Texts</h3>
+				<div id="compareTextsIntro"></div>		
+				
+				<div data-role="collapsible"><!-- Text A -->
+					<h3>Text A</h3>
+					<div id="compareTextsTextA"></div>			
+				</div><!-- /Text A -->
+			
+				<div data-role="collapsible"><!-- Text B -->
+					<h3>Student B</h3>
+					<div id="compareTextsTextB"></div>					
+				</div><!-- /Text B -->
+				
+			</div><!-- Compare Texts -->
+
+			<div id="reflection" class="hidden" data-role="collapsible"><!-- Reflection -->
+				<h3>Reflection</h3>
+				<div id="reflectionContent"></div>			
+			</div><!-- /Reflection -->
+
+			<div id="teacherNotes" class="hidden" data-role="collapsible"><!-- collapsible Teacher Notes -->
+				<h3>Teacher Notes</h3>
+				<div id="teacherNotesContent"></div>
+			</div><!-- collapsible Teacher Notes -->
+
+			<div class="" data-role="collapsible" data-collapsed="false"><!-- collapsible New Quiz -->
+				<h3>New Quiz</h3>
+				<p>First Quiz</p>
+				<div id="quiz-destination-1"></div>
+				<hr>
+				<p>Second Quiz</p>
+				<div id="quiz-destination-2"></div>
+				<hr>
+				<p>Third Quiz</p>
+				<div id="quiz-destination-3"></div>
+				<hr>
+				<hr>
+				<p>Combined Output</p>
+				<div id="quizzes-destination-combined"></div>
+				
+				<hr>
+				<hr>
+				<p>test output</p>
+				<div id="test-video-output"></div>
+				<div id="quizGeneralOutput">here</div>
+				
+				<p>test transcript process</p>
+				
+				<div id="testTranscriptProcess" class="processPlayButtons">
+				
+				<p><span class="playButton" data-cue-in="00" data-cue-out="17.58" data-rate="1" data-pause="0">Next week is \"Remembrance's Day\", when we think about the people who served the country in times of war. If you look back in your family tree you might find someone who fought in a war maybe a long time ago or maybe more recently. Sarah had a look at the experiences of her grandfather and found out what Remembrance Day is all about."</span></p>
+				<p><span class="playButton" data-cue-in="17.60" data-cue-out="41.97">GRANDPA VO: Dorothy Darling, Well, we are spending our first day off duty today and I'm taking the opportunity to write a few lines. We have been working a lot of overtime the last few days in fact it has been almost midnight by the time we get to bed. Anyway, I hope our efforts will help end this war quicker."</span></p>
+				<p><span class="playButton" data-cue-in="218.34" data-cue-out="235.75">Today Remembrance Day is time to honour all of those who've served; the people that we know and the people we never met. It's a time to celebrate peace and honour courage. And think about the ordinary Australians who lived through extraordinary times." </span></p>
+				
+				</div>
+				
+				<p>Process Play Buttons</p>
+				<div class="processPlayButtons">
+				
+				<p><span class="playButton" data-cue-in="00" data-cue-out="17.58" data-rate="1" data-pause="0">Next week is \"Remembrance's Day\", when we think about the people who served the country in times of war. If you look back in your family tree you might find someone who fought in a war maybe a long time ago or maybe more recently. Sarah had a look at the experiences of her grandfather and found out what Remembrance Day is all about."</span></p>
+				<p><span class="playButton" data-cue-in="17.60" data-cue-out="41.97">GRANDPA VO: Dorothy Darling, Well, we are spending our first day off duty today and I'm taking the opportunity to write a few lines. We have been working a lot of overtime the last few days in fact it has been almost midnight by the time we get to bed. Anyway, I hope our efforts will help end this war quicker."</span></p>
+				<p><span class="playButton" data-cue-in="218.34" data-cue-out="235.75">Today Remembrance Day is time to honour all of those who've served; the people that we know and the people we never met. It's a time to celebrate peace and honour courage. And think about the ordinary Australians who lived through extraordinary times." </span></p>
+				
+				</div>
+				
+				<p>Select Quizz Output</p>
+				<div id="select-quiz-output">
+				
+				</div>
+
+			</div><!-- collapsible New Quiz -->
+
+
+			<div class="hidden" data-role="collapsible" data-collapsed="true"><!-- collapsible Cloze -->
+				<h3>Quiz</h3>
+
+
+				<div id="cloze-build" class="cloze-element">	
+					<button id="btnBuildCloze" onclick="cloze()" >Build Cloze</button>
+					<button id="btnClozeToggleControls" class="cloze-hide" disabled onclick="clozeToggleControls()" >Toggle Quiz Controls</button>
+				</div>
+		
+				<div class="cloze-controls cloze-element" >
+
+					<!-- <button id="btnPrettify" onclick="prettify()" >:)</button>  -->
+					<button id="btnSetupCloze" disabled onclick="setupCloze()" >Display Normal</button>
+					<button id="btnDisplayAll" disabled onclick="clozeDisplayAll()" >Display All</button>
+					<button id="btnToggleQuestionNumbers" disabled onclick="toggleQuestionNumbers()" >Question Numbers</button>
+					<button id="btnToggleClozeTerms" disabled onclick="toggleClozeTerms()" >Items</button>
+					<button id="btnToggleHighlightClozeTerms" disabled onclick="toggleHighlightClozeTerms()" >Highlight Items</button>
+					<button id="btnToggleClozeGaps" disabled onclick="toggleClozeGaps()" >Gaps</button>
+					<button id="btnToggleClozeOptions" disabled onclick="toggleClozeOptions()" >Answer Options</button>
+					<button id="btnToggleClozeInput" disabled onclick="toggleClozeInput()" >Short Input</button>
+					<button id="btnToggleClozeQuestions" disabled onclick="toggleClozeQuestions()" >Select Input</button>
+					<!-- <button id="btnClozeTidy" disabled onclick="clozeTidy()" >Tidy cloze</button> -->
+				</br>
+				<hr>
+					<button id="btnClozeToggleHints" disabled onclick="clozeToggleHints()" >Hints</button>
+					<button id="btnclozeCheck" disabled onclick="clozeCheck()" >Check Select</button>
+					<button id="btnclozeCheckInput" disabled onclick="clozeCheckInput()" >Check Short Input</button>
+					<button id="btnClozeAnswers" disabled onclick="clozeAnswers()" >Display Answers</button>
+					<button id="btnClozeReset" onclick="clozeReset()" >Reset cloze</button>
+
+				</div>                
+	
+		
+				<div class="cloze-set cloze-element">
+
+		
+						<span> Quiz </span>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideo()" type="button">Play</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="pauseVideo()" type="button">Pause</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideoRate(1)" type="button">x1</button>
+		<button class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="playVideoRate(0.5)" type="button">x.5</button>
+							<button id="btnclozeCheck" class="ui-btn ui-mini ui-corner-all ui-btn-inline"  onclick="clozeCheck()" >Check Answers</button>
+					<button id="btnClozeAnswers" class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="clozeAnswers()" >Display Answers</button>
+					<button id="btnClozeReset" class="ui-btn ui-mini ui-corner-all ui-btn-inline" onclick="clozeReset()" >Reset cloze</button>
+
+		
+						<h3>Discuss your country</h3>
+
+<p>Next week is Remembrance Day, when we think about the people who served the country in times of war. If you look back in your family tree you might find someone who fought in a war maybe a long time ago or maybe more recently. Sarah had a look at the experiences of her grandfather and found out what Remembrance Day is all about.</p>
+ 
+<p>Ask your partner what their country does to remember soldiers who died.  Compare with your own country.   </p>						
+						
+<!--						
+<span class="cloze" data-a="a" data-b="b" data-c="c" data-d="d" data-answer="ans" data-hint="Listen <span class=&quot;play-button-withicon&quot; onclick=&quot;playPopVideo(01, 02, 0, 1)&quot;>audio</span> " data-explanation="..."  data-multisearch="" >ans</span>
+
+<p>? <span class="cloze" data-a="" data-b="" data-c="" data-d="" data-answer="ans" data-hint="Listen again to the <span class=&quot;play-button-withicon&quot; onclick=&quot;playPopVideo(0,1, 0, 1)&quot;>audio</span> " data-explanation=""  data-multisearch="" >ans</span></p>
+
+<span class="cloze" data-a="" data-b="" data-c="" data-d="" data-answer="ans" data-hint="Listen again to the <span class=&quot;play-button-withicon&quot; onclick=&quot;playPopVideo(0,1, 0, 1)&quot;>audio</span> " data-explanation="">ans</span>
+-->
+
+<h3>Grammatical Tenses for Letter Writing</h3>
+
+<p>Dorothy Darling, Well, we <span class="cloze" data-a="spend" data-b="spent" data-c="have spent" data-d="are spending" data-answer="are spending" data-hint="" data-explanation="">are spending</span> <span class="play-button-withicon" onclick="playPopVideo(22.8,24.17, 0, 1)">?</span> our first day off duty today and I <span class="cloze" data-a=" take" data-b=" took" data-c=" have taken" data-d="'m taking" data-answer="'m taking" data-hint="" data-explanation="">'m taking</span> <span class="play-button-withicon" onclick="playPopVideo(24.85,26.16, 0, 1)">?</span> the opportunity to write a few lines. We <span class="cloze" data-a="work" data-b="worked" data-c="have worked" data-d="have been working" data-answer="have been working" data-hint="" data-explanation="">have been working</span> <span class="play-button-withicon" onclick="playPopVideo(29.25,30.71, 0, 1)">?</span> a lot of overtime the last few days in fact it <span class="cloze" data-a="" data-b="is" data-c="was" data-d="has been" data-answer="has been" data-hint="" data-explanation="">has been</span> <span class="play-button-withicon" onclick="playPopVideo(32.3,34.4, 0, 1)">?</span> almost midnight by the time we get to bed. Anyway, I hope our efforts will help end this war quicker.</p>
+
+<p>What do you notice about the tense used in letter writing?</p>
+
+<h3>Past Tenses</h3>
+
+<p>This is an excerpt from the transcript.  It tells the story of how the First World War started in Europe.  There is a mixture of past tenses.  Can you guess which ones are correct?  Try the activity where you have a different text from your partner.  Read to each other to find the differences, and then listen for the answer.</p>
+
+<p><span onclick="playPopVideo((100.2), 113.47, 0, 1)" class="play-button">01:40.2-01:53.5</span>  The date marks the end of the First World War: a devastating global conflict that <span class="cloze" data-a="cost" data-b="were costing" data-c="have cost" data-d="had cost" data-answer="cost" data-hint="" data-explanation="">cost</span> more than 30 million lives. Its beginnings were complicated.</p>
+
+<p><span onclick="playPopVideo((113.49), 123.02, 0, 1)" class="play-button">01:53.5-02:03.0</span>At the start of last century European countries <span class="cloze" data-a="built" data-b="were building" data-c="have built" data-d="had built" data-answer="had built" data-hint="" data-explanation="">had built</span> up a series of alliances with each other. These ones were all on one side. These ones were on the other.</p>
+
+<p><span onclick="playPopVideo((123.04), 134.26, 0, 1)" class="play-button">02:03.0-02:14.3</span>So when the Austro-Hungarian Empire declared war on Serbia in 1914 the countries' allies <span class="cloze" data-a="came" data-b="were coming" data-c="have come" data-d="had come" data-answer="came" data-hint="" data-explanation="">came</span> to help and a small war became a world war.</p>
+
+<p><span onclick="playPopVideo((134.28), 143.52, 0, 1)" class="play-button">02:14.3-02:23.5</span>Back then Australia was still a member of the British Empire and many young Aussies <span class="cloze" data-a="were" data-b="were being" data-c="have been" data-d="had been" data-answer="were" data-hint="" data-explanation="">were</span> keen to sign up and serve their king and country.</p>
+
+<p><span onclick="playPopVideo((143.54), 149.22, 0, 1)" class="play-button">02:23.5-02:29.2</span> Many battles <span class="cloze" data-a="were fought" data-b="were being fought" data-c="have been fought" data-d="had been fought" data-answer="were fought" data-hint="" data-explanation="">were fought</span> in trenches. It was gruelling and deadly.</p>
+
+<p><span onclick="playPopVideo((149.24), 168.06, 0, 1)" class="play-button">02:29.2-02:48.1</span> But by 1918 Australia's allies <span class="cloze" data-a="began" data-b="begun" data-c="have begun" data-d="had begun" data-answer="had begun" data-hint="" data-explanation="">had begun</span> to get the upper hand. On the 11th of November, 1918, leaders of the European countries came together and signed an armistice - an agreement to end the war. By 11.00 the war was over.</p>
+
+<p><span onclick="playPopVideo((168.08), 178.75, 0, 1)" class="play-button">02:48.1-02:58.8</span> That day was known as Armistice Day and it was celebrated every year in the countries which <span class="cloze" data-a="helped" data-b="were helping" data-c="have helped" data-d="had helped" data-answer="helped" data-hint="" data-explanation="">helped</span> to win the war. Later it became known as Remembrance Day.</p>
+
+<p><span onclick="playPopVideo((178.77), 186.42, 0, 1)" class="play-button">02:58.8-03:06.4</span> More than 60,000 Australians <span class="cloze" data-a="were killed" data-b="were being killed" data-c="have been killed" data-d="had been killed" data-answer="were killed" data-hint="" data-explanation="">were killed</span> in the First World War. In a country with a population of less than a million that was devastating.</p>
+
+<p><span onclick="playPopVideo((186.44), 196.22, 0, 1)" class="play-button">03:06.4-03:16.2</span> In fact the First World War was so terrible that many around the world thought it could never happen again. That's why they <span class="cloze" data-a="called" data-b="were calling" data-c="has called" data-d="had called" data-answer="called" data-hint="" data-explanation="">called</span> it the Great War - the war to end all wars.</p>
+
+<p><span onclick="playPopVideo((196.24), 206.92, 0, 1)" class="play-button">03:16.2-03:26.9</span> But it <span class="cloze" data-a="wasn't" data-b="wasn't being" data-c="hasn't been" data-d="hadn't been" data-answer="wasn't" data-hint="" data-explanation="">wasn't</span>. Just 20 years later the world was at war again; this time against Nazi Germany and its allies.</p>
+
+<p><span onclick="playPopVideo((206.94), 218.32, 0, 1)" class="play-button">03:26.9-03:38.3</span> Australia found itself fighting not just for its allies, but to defend its own borders. And when peace came at last we again <span class="cloze" data-a="promised" data-b="were promising" data-c="have promised" data-d="had promised" data-answer="promised" data-hint="" data-explanation="">promised</span> never to forget.</p>
+
+
+<h3>Synonyms</h3>
+
+<p>Listen carefully to find the words that have been changed to synonyms.</p>
+
+<p><span onclick="playPopVideo((100.2), 113.47, 0, 1)" class="play-button">01:40.2-01:53.5</span> The date marks the conclusion of the First World War: a devastating global conflict that cost over 30 million lives. Its beginnings were complicated.</p>
+
+<p><span onclick="playPopVideo((113.49), 123.02, 0, 1)" class="play-button">01:53.5-02:03.0</span> At the start of last century European countries had created a series of partnerships with each other. These ones were all on one side. These ones were on the other.</p>
+
+<p><span onclick="playPopVideo((123.04), 134.26, 0, 1)" class="play-button">02:03.0-02:14.3</span> So when the Austro-Hungarian Empire declared war on Serbia in 1914 the countries' allies came to assist and a small war became a world war.</p>
+
+<p><span onclick="playPopVideo((134.28), 143.52, 0, 1)" class="play-button">02:14.3-02:23.5</span> Back then Australia was still a member of the British Empire and a lot of young Aussies were keen to sign up and serve their king and country.</p>
+
+<p><span onclick="playPopVideo((143.54), 149.22, 0, 1)" class="play-button">02:23.5-02:29.2</span> Numerous battles were fought in trenches. It was gruelling and deadly.</p>
+
+<p><span onclick="playPopVideo((149.24), 168.06, 0, 1)" class="play-button">02:29.2-02:48.1</span> But by 1918 Australia's allies had started to get the upper hand. On the 11th of November, 1918, leaders of the European countries met and signed an cease fire - an agreement to end the war. By 11.00 the war was over.</p>
+
+<p><span onclick="playPopVideo((168.08), 178.75, 0, 1)" class="play-button">02:48.1-02:58.8</span> That day was called Armistice Day and it was celebrated every year in the nations which helped to win the war. Subsequently it became known as Remembrance Day.</p>
+
+<p><span onclick="playPopVideo((178.77), 186.42, 0, 1)" class="play-button">02:58.8-03:06.4</span> More than 60,000 Australians died in the First World War. In a country with a population of under a million that was devastating.</p>
+
+<p><span onclick="playPopVideo((186.44), 196.22, 0, 1)" class="play-button">03:06.4-03:16.2</span> In fact the First World War was so awful that many around the world thought it could never occur again. That's why they named it the Great War - the war to end all wars.</p>
+
+<p><span onclick="playPopVideo((196.24), 206.92, 0, 1)" class="play-button">03:16.2-03:26.9</span> But it wasn't. Only 20 years later the world was at war once more; this time against Nazi Germany and its allies.</p>
+
+<p><span onclick="playPopVideo((206.94), 218.32, 0, 1)" class="play-button">03:26.9-03:38.3</span> Australia found itself fighting not only for its allies, but to protect its own borders. And when peace came finally we again promised never to forget.</p>
+
+
+
+
+
+<p></p>
+<p></p>
+<p></p>
+
+				</div>
+
+<!--
+					<button id="btnCloseMultiSearch" class="cloze-hide" onclick="clearMultiSearch()" >Close MultiSearch</button>
+
+					<div id="cloze-multisearch" class="cloze-hide">
+						<p>Searching Multi-Search ... please wait.</p>
+						<iframe id="iframe-multisearch" width="100%" height="1024px" src=""></iframe>        
+					</div>
+-->
+
+
+				<div id="saveCloze" class="cloze-show cloze-element"></div>
+
+				<div id="cloze-hints-explanations" class="cloze-element">
+
+					<div id="hint-tinker" class="cloze-hide">
+						<p>What's her role or job?  How do you think she got her name? </p>
+						<!--
+						<p><iframe width="560" height="315" src="http://www.youtube.com/embed/KBaafA1Adp4" frameborder="0" allowfullscreen></iframe></p>
+						-->
+					</div>
+					<div id="explanation-tinker" class="cloze-hide">
+						<p>To tinker with something is to modify it.  Here's an example... </p>
+						<!--
+						<p><iframe width="560" height="315" src="http://www.youtube.com/embed/gmxSsRn71HA" frameborder="0" allowfullscreen></iframe></p>
+						<p>To potter around is not having a clear aim or abjective.  Here's an example.</p>
+						<p><iframe width="420" height="315" src="http://www.youtube.com/embed/_QX9r-WlDu8" frameborder="0" allowfullscreen></iframe></p>
+						-->
+ 
+				   </div>
+				</div>
+
+
+ 
+
+
+			</div><!-- collapsible Cloze -->
+
+
+
+		</div>	<!--collapsible set -->
+
+
+		
+	</div><!-- /content -->
+
+	<div data-role="footer"  >
+		<h4></h4>
+		
+	</div><!-- /footer -->
+</div><!-- /page -->
+
+
+<!-- Include extra scripts after page loaded -->
+
+	
+	<!-- Handlebars  -->
+	<script src="lib/handlebars/handlebars.min-latest.js"></script>
+
+	<script id="video-template" type="text/x-handlebars-template">
+
+<video id="myVideo" width="100%"   controls="controls" ontimeupdate="document.getElementById('trackTime').innerHTML = Math.floor(this.currentTime *100)/100 + ' / ' + Math.floor(this.duration);">
+	{{#if useThis}}
+		{{#each source}}
+			{{#if useThis}}
+				<source src="{{url}}" type="{{type}}">
+			{{/if}}
+		{{/each}}
+	{{/if}}
+	
+	{{#if closedCaptions.useThis}}
+		{{#each closedCaptions.source}}
+			{{#if useThis}}
+				<track src="{{url}}" label="{{label}}" kind="{{kind}}" srclang="{{srclang}}" >
+			{{/if}}
+		{{/each}}
+				
+	{{/if}}
+	Your browser does not support the video tag.
+</video> 	  
+
+	</script>
+
+	
+	<script id="templateTitleAndParas" type="text/x-handlebars-template">
+		<h4>{{title}}</h4>
+		{{#each paras}}
+			<p>{{this}}</p>
+		{{/each}}
+	</script>
+	<script id="templateTitleAndParasRaw" type="text/x-handlebars-template">
+		<h4>{{title}}</h4>
+		{{#each paras}}
+			<p>{{@index}} : {{{this}}}</p>
+		{{/each}}
+	</script>
+	
+	<script id="templateQuizGeneral" type="text/x-handlebars-template">
+		{{#each quizzes}}
+			<p>Quiz {{@index}} : {{{this.quiz.text}}}</p>
+			{{#each quiz.quizItems}}
+				<p>Quiz {{@../index}}, Quiz Item {{@index}} : </p>
+
+				{{#each quizItem.options}}
+					<p>Item {{@../../index}}-{{@../index}}: Option {{@index}}: Prompt {{prompt}}, Response {{response}}, Grade {{grade}}, Feedback {{feedback}}</p>
+					{{#each this }}
+						{{@key}}: {{this}}, 					
+					{{/each}}
+					</br>
+				{{/each}}	
+				{{#with quizItem}}	
+					<p>Type {{type}}, Hint {{hint}} , Explanation {{explanation}}</p>
+					<p>MultiSearch </p>
+					{{#each multiSearch}}
+						<p>{{@key}}: {{this}}</p>
+					{{/each}}
+
+					<hr>
+				{{/with}}
+				
+			{{/each}}		
+		{{/each}}
+	</script>
+
+	<script id="templateQuizSelect" type="text/x-handlebars-template">
+		{{#each quizzes}}
+			<p>Quiz {{@index}} : {{{this.quiz.text}}}</p>
+			{{#each quiz.quizItems}}
+				<p>Quiz {{@../index}}, Quiz Item {{@index}} : </p>
+
+				{{#each quizItem.options}}
+					<p>Item {{@../../index}}-{{@../index}}: Option {{@index}}: Response {{response}}, Grade {{grade}}</p>
+				{{/each}}	
+
+				<select name="name-quiz-select-{{@../index}}-{{@index}}" id="quiz-select-{{@../index}}-{{@index}}" class="quiz-select" data-quiz="{{@../index}}" data-quiz-item="{{@index}}" onchange="selectHasChanged( {{@../index}}, {{@index}}, $('select[name=name-quiz-select-{{@../index}}-{{@index}}]').val() )">				
+					<option value="">choose one...</option>
+				{{#each quizItem.options}}
+					<option value="{{@index}}">Item {{@../../index}}-{{@../index}}: Option {{@index}}: Response {{response}}, Grade {{grade}}</option>
+				{{/each}}
+				</select>
+				<button id="quiz-select-check-{{@../index}}-{{@index}}" class="quiz-select-check hidden"  onclick="checkAQuiz( {{@../index}}, {{@index}}, $('select[name=name-quiz-select-{{@../index}}-{{@index}}]').val() )" ></button>
+				<span id="quiz-select-grade-{{@../index}}-{{@index}}" class="quiz-select-grade" >Select an option</span>
+
+				<button id="quiz-select-hint-button-{{@../index}}-{{@index}}" class="quiz-select-hint-button"  onclick="hintQuiz( {{@../index}}, {{@index}}, $('select[name=name-quiz-select-{{@../index}}-{{@index}}]').val() )" >Hint</button>
+				<span id="quiz-select-hint-{{@../index}}-{{@index}}" class="quiz-select-hint hidden" >hint content....</span>
+
+				<button id="quiz-select-explanation-button-{{@../index}}-{{@index}}" class="quiz-select-explanation-button"  onclick="explanationQuiz( {{@../index}}, {{@index}}, $('select[name=name-quiz-select-{{@../index}}-{{@index}}]').val() )" >Explanation</button>
+				<span id="quiz-select-explanation-{{@../index}}-{{@index}}" class="quiz-select-explanation hidden" >explanation content....</span>
+
+																													
+				
+			{{/each}}		
+		{{/each}}
+	</script>
+
+
+    <script type="text/javascript" src="secondsToHMS.js"></script>       
+    <script type="text/javascript" src="lesson.js"></script>       
+    <script type="text/javascript" src="lessonData.json"></script>       
+
+    <script type="text/javascript" src="processPlayButtons.js"></script>       
+    <script type="text/javascript" src="lessonFunctions.js"></script>       
+
+		
+	
+	<script> <!-- slimscroll make transcript div scrollable -->
+
+		$(function(){
+			$('#transcript').slimScroll({
+				height: '450px',
+				railVisible: false,
+				alwaysVisible: false,
+				allowPageScroll: false
+			});
+		});
+	</script> <!-- slimscroll make transcript div scrollable -->
+	
+	<script src="jquery-ui-extra.js"></script>
+	
+	<script> <!-- jQuery UI apply sortable to transcriptSortable -->
+  $( function() {
+    $( "#transcriptSortable" ).sortable({
+    placeholder: "ui-state-highlight",
+      classes: {
+    			"ui-sortable": "highlight"
+  				}
+    });
+    // $( "#sortable2" ).disableSelection();
+    
+    // style list
+    $( "#transcriptSortable li" ).css({
+    "list-style": "none", 
+    "cursor": "grab",
+    "font-size": "1.2em" 
+    });
+    
+    $("#transcriptSortable li").hover(function(){
+    $(this).css("background-color", "yellow");
+    }, function(){
+    $(this).css("background-color", "inherit");
+});
+
+	// add class "ui-icon" , "ui-icon-arrowthick-2-n-s"
+    $("#transcriptSortable li span.icon").addClass("ui-icon");
+    $("#transcriptSortable li span.icon").addClass("ui-icon-arrowthick-2-n-s");
+    
+    
+  } );
+  </script> <!-- jQuery UI apply sortable to jQuery Mobile collapsible -->
+
+	<!-- Include the script for video popups - after page loaded -->
+	<script><!-- make video popup behave per https://api.jquerymobile.com/popup/ >
+		$( document ).on( "pageinit", function() {
+			$( "#popupVideo iframe" )
+				.attr( "width", 0 )
+				.attr( "height", 0 );
+ 
+			$( "#popupVideo" ).on({
+				popupbeforeposition: function() {
+					var size = scale( 497, 298, 15, 1 ),
+						w = size.width,
+						h = size.height;
+ 
+					$( "#popupVideo iframe" )
+						.attr( "width", w )
+						.attr( "height", h );
+				},
+				popupafterclose: function() {
+					$( "#popupVideo iframe" )
+						.attr( "width", 0 )
+						.attr( "height", 0 );
+				}
+			});
+		});
+
+	</script><!-- make video popup behave per https://api.jquerymobile.com/popup/ -->
+	
+	<script> <!--- randomise DOM elements http://james.padolsey.com/javascript/shuffling-the-dom/ --->
+	
+	// Shuffle all paragraphs within a div:
+	$('ul#transcriptSortable li').shuffle();
+	
+	// Shuffle all list items within a list:
+	//$('ul#list li').shuffle();
+ 
+	// Shuffle all DIVs within the document:
+	//$('div').shuffle();
+ 
+	// Shuffle all <a>s and <em>s:
+	//$('a,em').shuffle();
+	</script> <!--- randomise DOM elements http://james.padolsey.com/javascript/shuffling-the-dom/ --->
+	
+	<!--
+	<script><!-- Cloze functions -->
+  	$( function() {			
+		cloze();
+
+		setupCloze();
+					highlightButtons();
+
+	});		
+	
+	</script><!-- Cloze functions -->
+	-->
+	
+
+</body>
+</html>

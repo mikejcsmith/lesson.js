@@ -1,0 +1,330 @@
+dataHandler (
+// http://www.jsoneditoronline.org/
+
+{
+	"media" : {
+		"title" : "Media Title", // This will be used in the page title
+		"attributions" : [
+			{"url": "http://www.abc.net.au/btn/story/s3880227.htm", "linkText":"BTN Story", "useThis" : true}
+		],
+		"video" : 	{ 
+			"title" : "Remembrance Day 2013", // This will be used in headings
+			"useThis" : true, 
+			// Usually true, but you can turn off if using multiple media types
+			// for example you might want only audio to be used					
+			"source" : [
+				// These sources are used to construct the HTML5 video element content
+				// This is an array to ensure correct ordering
+				// The first available source will be used (if set to true)
+				// Use the 'false' attribute to store a URL without actually using it.
+				// This is useful to force use of a local file 
+				// Generally, only an MP4 will be needed
+				{"url" : "http://educationvideo.com.au/btn/400/20131105_remembranceday_hi.mp4" ,"type" : "video/mp4", "useThis" : false }, // put remote mp4 file url here 
+				{"url" : "remote ogv" ,"type" : "video/ogv", "useThis" : false }, // put remote ogv file url here 
+				{"url" : "20131105_remembranceday_hi.mp4" ,"type" : "video/mp4", "useThis" : true  }, // put local mp4 file 
+				{"url" : "local ogv" ,"type" : "video/ogv", "useThis" : false }  // put local ogv file 
+			] ,
+			"closedCaptions" : {
+				"useThis" : false,
+				// Default false, use this to create a VTT closed caption track for video
+				"source" : [
+					// This is an array to ensure correct ordering
+					// The first available source will be used (if set to true)
+					// Use the 'false' attribute to store a URL without actually using it.
+					// This is useful to force use of a local file 
+					{"url" : "remote vtt" , "kind":"captions", "srclang":"en-us", "label":"remote-vtt", "useThis" : false }, // put remote VTT file url here 
+					{"url" : "20131105_remembranceday_hi.vtt", "kind":"captions", "srclang":"en-us", "label":"local-vtt" , "useThis" : true  } // put local VTT file 					
+				]						
+			}
+		},
+	
+		"audio" : 	{ 
+			"title" : "audio media title", // This will be used in headings 
+			"useThis" : false, 
+			// Usually false since video lessons are more common, 
+			// but you can turn on if you want an audio HTML5 element created
+			"source" : [
+				// These sources are used to construct the HTML5 audio element content
+				// This is an array to ensure correct ordering
+				// The first available source will be used (if set to true)
+				// Use the 'false' attribute to store a URL without actually using it.
+				// This is useful to force use of a local file 
+				// Generally, only an MP3 will be needed
+				{"url" : "remote mp3" , "useThis" : false }, // put remote mp3 file url here 
+				{"url" : "remote oga" , "useThis" : false }, // put remote oga file url here 
+				{"url" : "local mp3" , "useThis" : false  }, // put local mp3 file 
+				{"url" : "local oga" , "useThis" : false }  // put local oga file 
+			] 
+		},
+
+    	"transcript": {
+			"title": "transcript title",
+			"cues": {
+				"cueIn": "0",
+				"cueOut": "235.75"
+			},
+			"elements": [
+				{
+					"cueIn": "0",
+					"cueOut": "17.58",
+					"text": "Next week is \"Remembrance's Day\", when we think about the people who served the country in times of war. If you look back in your family tree you might find someone who fought in a war maybe a long time ago or maybe more recently. Sarah had a look at the experiences of her grandfather and found out what Remembrance Day is all about."
+				},
+				{
+					"cueIn": "17.60",
+					"cueOut": "41.97",
+					"text": "GRANDPA VO: Dorothy Darling, Well, we are spending our first day off duty today and I'm taking the opportunity to write a few lines. We have been working a lot of overtime the last few days in fact it has been almost midnight by the time we get to bed. Anyway, I hope our efforts will help end this war quicker."
+				},
+				{
+					"cueIn": "218.34",
+					"cueOut": "235.75",
+					"text": "Today Remembrance Day is time to honour all of those who've served; the people that we know and the people we never met. It's a time to celebrate peace and honour courage. And think about the ordinary Australians who lived through extraordinary times."
+				},
+				{
+					"cueIn": "235.77",
+					"cueOut": "246.00",
+					"text": "Outro and end"
+				}
+			]
+		},
+
+		"guideMedia" :"to be added"	
+	
+	}, // close media
+	
+	"lesson" : {
+
+		"transcriptSort" : {
+			"useThis" 	: true,
+			"intro" : "transcript sort intro", 
+			"cues": {"cueIn" : 0, "cueOut" : 235.75},
+			"elements": [
+				{
+					"cueIn": 0,
+					"cueOut": 17.58,
+					"text": "Next week is \"Remembrance's Day\", when we think about the people who served the country in times of war. If you look back in your family tree you might find someone who fought in a war maybe a long time ago or maybe more recently. Sarah had a look at the experiences of her grandfather and found out what Remembrance Day is all about."
+				},
+				{
+					"cueIn": 17.60,
+					"cueOut": 41.97,
+					"text": "GRANDPA VO: Dorothy Darling, Well, we are spending our first day off duty today and I'm taking the opportunity to write a few lines. We have been working a lot of overtime the last few days in fact it has been almost midnight by the time we get to bed. Anyway, I hope our efforts will help end this war quicker."
+				},
+				{
+					"cueIn": 218.34,
+					"cueOut": 235.75,
+					"text": "Today Remembrance Day is time to honour all of those who've served; the people that we know and the people we never met. It's a time to celebrate peace and honour courage. And think about the ordinary Australians who lived through extraordinary times."
+				}
+			]
+		},
+					
+		"compareTexts" : {
+			"useThis" 	: false,
+			"useRAW"	: true,
+			"intro" 	: {
+				"title" : "intro title...", // h4 
+				"paras" : ["para 1", "para 2", "para &lt;br&gt; \<br\> 3"]
+				}, 
+			"textA" 	: {
+				"title" : "A title...", // h4 
+				"paras" : ["para 1", "para  <br>2", "para 3"]
+				}, 
+			"textB" 	: {
+				"title" : "B title...", // h4 
+				"paras" : ["para  <br>1", "para 2", "para 3"]
+				} 
+		},
+		
+		"reflection" : {
+			"useThis" 	: false,
+			"useRAW"	: true,
+			"title" : "reflection title...", // h4 
+			"paras" : [
+				"para 1", 
+				"para <br> 2", 
+				"Discuss with your group, <br>and then write 100 words on this topic."]
+		},
+		
+		"teacherNotes" : {
+			"useThis" 	: false,
+			"useRAW"	: true,
+			"title" : "Teacher Notes", // h4 
+			"paras" : [
+				"This lesson is slightly experimental because I am still developing the framework.  Please let me know if you strike any technical problems.", 
+				"Pedagogically, I aimed to create a brief lesson simply introducing Halloween, particularly for non-western ESL learners and also particularly for lower levels at Pre-Intermediate and Low Intermediate (my current class level). There are hints, links to play audio segments, and further explanations.", 
+				"I haven't finished documentation to describe all the available functions, but if you click on the Quiz Controls button you will see quite extensive display options. These are designed for grading the level. ",
+				"There are many ideas to develop this framework, but I'd welcome any of your suggestions ",
+				"Cheers, <br> Mike <br> mikejcsmith@gmail.com"]
+		},
+		
+		"quizzes" : [
+		
+			{ "quiz" : {
+				"text" : "This is <span>an<\/span> excerpt from the transcript.  It tells the story of how <span>the<\/span> First Worlds War started in Europe.  There is a mixture of past tenses.  Can you guess which ones are correct?  Try the activity where you have a different text from your partner.  Read to each other to find the differences, and then listen for the answer." ,
+				"quizItems" : [
+					{ "quizItem" : {
+						"options"     : [
+							{"prompt" : "option prompt...", "response": "Answ...an", "grade": 100, "feedback":"Correct."}, // use # as first character to inject a DIV's contents
+							{"prompt" : "option prompt...", "response": "altAnsw1...", "grade": 80, "feedback":"OK, but not the best answer."}, // use # as first character to inject a DIV's contents 
+							{"prompt" : "option prompt...", "response": "altAnsw2...", "grade": 0, "feedback":"Incorrect."}, // use # as first character to inject a DIV's contents 
+							{"prompt" : "option prompt...", "response": "altAnsw3...", "grade": 0, "feedback":"Incorrect."} // last option needs no comma
+							], // any number of options 
+							// include any that you wish to provide feedback on
+							// other responses (to short answer) will score zero
+							// best practice is to order from best to worst
+							// these options are always randomised on display
+							// use just two options for true/false or yes/no
+							// use labels for ordering question
+							// ordering question can be used as a matching question 
+						"type" : "drop", 
+						// can be 
+						// drop		 - inline drop down (default)
+						// single    - choose one (radio buttons)
+						// multi     - choose more than one (check boxes)
+						// order     - put in correct order (drag/drop)
+						// short     - text field entry case-insensitive
+						// shortCase - text field entry case-sensitive
+						"hint"	      : "Hint..." , // use # as first character to inject a DIV's contents
+						"explanation" : "Explanation...", // use # as first character to inject a DIV's contents
+						"multiSearch" : {
+							"LocalGlossary" : "#glossary", // display a DIV's contents in a panel and open it
+							"DictionaryDotCom" : "http://www.dictionary.com/browse/",
+							"Google" : "https://www.google.com.au/search?q=",
+							"NetSpeak" : "http://www.netspeak.org/#query=**",
+							"JustTheWord" : "http://www.just-the-word.com/main.pl?word="
+						} // term used for glossary, dictionary, concordance, etc (no comma for last item) 
+					}} , // quiz item (last quiz item needs no comma)
+					
+					{ "quizItem" : {
+						"options"     : [
+							{"prompt" : "option prompt...", "response": "Answ...the", "grade": 100, "feedback":"Correct."}, // use # as first character to inject a DIV's contents
+							{"prompt" : "option prompt...", "response": "altAnsw1...", "grade": 80, "feedback":"OK, but not the best answer."}, // use # as first character to inject a DIV's contents 
+							{"prompt" : "option prompt...", "response": "altAnsw2...", "grade": 0, "feedback":"Incorrect."}, // use # as first character to inject a DIV's contents 
+							{"prompt" : "option prompt...", "response": "altAnsw3...", "grade": 0, "feedback":"Incorrect."} // last option needs no comma
+							], // any number of options 
+							// include any that you wish to provide feedback on
+							// other responses (to short answer) will score zero
+							// best practice is to order from best to worst
+							// these options are always randomised on display
+							// use just two options for true/false or yes/no
+							// use labels for ordering question
+							// ordering question can be used as a matching question 
+						"type" : "drop", 
+						// can be 
+						// drop		 - inline drop down (default)
+						// single    - choose one (radio buttons)
+						// multi     - choose more than one (check boxes)
+						// order     - put in correct order (drag/drop)
+						// short     - text field entry case-insensitive
+						// shortCase - text field entry case-sensitive
+						"hint"	      : "Hint..." , // use # as first character to inject a DIV's contents
+						"explanation" : "Explanation...", // use # as first character to inject a DIV's contents
+						"multiSearch" : {
+							"LocalGlossary" : "#glossary", // display a DIV's contents in a panel and open it
+							"DictionaryDotCom" : "http://www.dictionary.com/browse/",
+							"Google" : "https://www.google.com.au/search?q=",
+							"NetSpeak" : "http://www.netspeak.org/#query=**",
+							"JustTheWord" : "http://www.just-the-word.com/main.pl?word="
+						} // term used for glossary, dictionary, concordance, etc (no comma for last item) 
+					}}  // quiz item (last quiz item needs no comma)
+
+				],
+				"htmlTag" : "p", // quiz HTML tag - usually <p>
+				"destination" : "quiz-destination-1" // quiz destination DIV, last quiz attribute needs no comma
+			}}, // quiz
+				
+			{ "quiz" : {
+				"text" : "The date marks the end of the First World War: a devastating global conflict that <span>cost<\/span> more than 30 million lives. Its beginnings were complicated.  " ,
+				"quizItems" : [
+
+					{ "quizItem" : {
+						"options"     : [
+							{"prompt" : "option prompt...", "response": "Answ...cost", "grade": 100, "feedback":"Correct."}, // use # as first character to inject a DIV's contents
+							{"prompt" : "option prompt...", "response": "altAnsw1...", "grade": 80, "feedback":"OK, but not the best answer."}, // use # as first character to inject a DIV's contents 
+							{"prompt" : "option prompt...", "response": "altAnsw2...", "grade": 0, "feedback":"Incorrect."}, // use # as first character to inject a DIV's contents 
+							{"prompt" : "option prompt...", "response": "altAnsw3...", "grade": 0, "feedback":"Incorrect."} // last option needs no comma
+							], // any number of options 
+							// include any that you wish to provide feedback on
+							// other responses (to short answer) will score zero
+							// best practice is to order from best to worst
+							// these options are always randomised on display
+							// use just two options for true/false or yes/no
+							// use labels for ordering question
+							// ordering question can be used as a matching question 
+						"type" : "drop", 
+						// can be 
+						// drop		 - inline drop down (default)
+						// single    - choose one (radio buttons)
+						// multi     - choose more than one (check boxes)
+						// order     - put in correct order (drag/drop)
+						// short     - text field entry case-insensitive
+						// shortCase - text field entry case-sensitive
+						"hint"	      : "Hint..." , // use # as first character to inject a DIV's contents
+						"explanation" : "Explanation...", // use # as first character to inject a DIV's contents
+						"multiSearch" : {
+							"LocalGlossary" : "#glossary", // display a DIV's contents in a panel and open it
+							"DictionaryDotCom" : "http://www.dictionary.com/browse/",
+							"Google" : "https://www.google.com.au/search?q=",
+							"NetSpeak" : "http://www.netspeak.org/#query=**",
+							"JustTheWord" : "http://www.just-the-word.com/main.pl?word="
+						} // term used for glossary, dictionary, concordance, etc (no comma for last item) 
+					}}  // quiz item (last quiz item needs no comma)
+					
+
+
+				],
+				"htmlTag" : "p", // quiz HTML tag - usually <p>
+				"destination" : "quiz-destination-2" // quiz destination DIV, last quiz attribute needs no comma
+			}}, // quiz
+				
+			{ "quiz" : {
+				"text" : "At the start of last century European countries <span>had built</span> up a series of alliances with each other. These ones were all on one side. These ones were on the other." ,
+				"quizItems" : [
+
+					{ "quizItem" : {
+						"options"     : [
+							{"prompt" : "option prompt...", "response": "Answ...had built", "grade": 100, "feedback":"Correct."}, // use # as first character to inject a DIV's contents
+							{"prompt" : "option prompt...", "response": "altAnsw1...", "grade": 80, "feedback":"OK, but not the best answer."}, // use # as first character to inject a DIV's contents 
+							{"prompt" : "option prompt...", "response": "altAnsw2...", "grade": 0, "feedback":"Incorrect."}, // use # as first character to inject a DIV's contents 
+							{"prompt" : "option prompt...", "response": "altAnsw3...", "grade": 0, "feedback":"Incorrect."} // last option needs no comma
+							], // any number of options 
+							// include any that you wish to provide feedback on
+							// other responses (to short answer) will score zero
+							// best practice is to order from best to worst
+							// these options are always randomised on display
+							// use just two options for true/false or yes/no
+							// use labels for ordering question
+							// ordering question can be used as a matching question 
+							// ***(need to add prompt as order label and change text to response)
+						"type" : "drop", 
+						// can be 
+						// drop		 - inline drop down (default)
+						// single    - choose one (radio buttons)
+						// multi     - choose more than one (check boxes)
+						// order     - put in correct order (drag/drop)
+						// short     - text field entry case-insensitive
+						// shortCase - text field entry case-sensitive
+						"hint"	      : "Hint..." , // use # as first character to inject a DIV's contents
+						"explanation" : "Explanation...", // use # as first character to inject a DIV's contents
+						"multiSearch" : {
+							"LocalGlossary" : "#glossary", // display a DIV's contents in a panel and open it
+							"DictionaryDotCom" : "http://www.dictionary.com/browse/",
+							"Google" : "https://www.google.com.au/search?q=",
+							"NetSpeak" : "http://www.netspeak.org/#query=**",
+							"JustTheWord" : "http://www.just-the-word.com/main.pl?word="
+						} // term used for glossary, dictionary, concordance, etc (no comma for last item) 
+					}}  // quiz item (last quiz item needs no comma)
+					
+				], // end of quiz items
+				"htmlTag" : "p", // quiz HTML tag - usually <p>
+				"destination" : "quiz-destination-3" // quiz destination DIV, last quiz attribute needs no comma
+			}} // last quiz
+
+		] // end of quizzes definition
+	
+	} // close lesson
+		
+	
+} // close JSON	
+
+); // close JSONP function
+
+
